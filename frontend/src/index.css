@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-sc-gray-light text-[#0F1111] antialiased;
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+}
+
+@layer components {
+  /* SwiftCart Link Style */
+  .a-link {
+    @apply text-sc-link hover:text-sc-orange hover:underline cursor-pointer;
+  }
+
+  /* SwiftCart Primary Button (Yellow) */
+  .a-button-primary {
+    @apply bg-sc-yellow hover:bg-sc-yellow-hover border border-[#a88734] 
+           shadow-[0_2px_5px_0_rgba(213,217,217,.5)] rounded-lg py-1 px-3 
+           text-sm font-medium transition-all active:ring-2 active:ring-sc-yellow-dark;
+  }
+
+  /* SwiftCart Buy Now Button (Orange) */
+  .a-button-buy {
+    @apply bg-sc-orange hover:bg-[#e47911] border border-[#846a1c]
+           shadow-[0_2px_5px_0_rgba(213,217,217,.5)] text-white rounded-lg py-1 px-3
+           text-sm font-medium transition-all active:ring-2 active:ring-[#c45a00];
+  }
+
+  /* SwiftCart Search Input focus */
+  .a-search-focus {
+    @apply focus-within:ring-2 focus-within:ring-sc-orange focus-within:border-transparent;
+  }
+}
+
+/* Scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* SwiftCart-style focus ring */
+:focus-visible {
+  outline: 2px solid #ff9900;
+  outline-offset: 1px;
+}
+
