@@ -16,11 +16,11 @@ services:
       - key: FRONTEND_URL
         fromService:
           name: swiftcart-frontend
-          type: static
+          type: static_site
           property: url
 
   # SwiftCart Vite Frontend
-  - type: static
+  - type: static_site
     name: swiftcart-frontend
     env: static
     plan: free
