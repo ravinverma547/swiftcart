@@ -1,0 +1,39 @@
+services:
+  # SwiftCart Express Backend
+  - type: web
+    name: swiftcart-backend
+    env: node
+    plan: free
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        fromService:
+          name: swiftcart-frontend
+          type: static
+          property: url
+
+  # SwiftCart Vite Frontend
+  - type: static
+    name: swiftcart-frontend
+    env: static
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: swiftcart-backend
+          type: web
+          property: url
+          suffix: /api/v1
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
