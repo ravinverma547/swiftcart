@@ -13,5 +13,7 @@ router.post('/register', (0, validate_1.validate)(authValidation_1.registerSchem
 router.post('/login', (0, validate_1.validate)(authValidation_1.loginSchema), authController_1.login);
 router.get('/logout', authController_1.logout);
 router.get('/me', auth_1.isAuthenticated, authController_1.getMe);
+router.put('/prime', auth_1.isAuthenticated, authController_1.joinPrime);
+router.get('/admin/users', auth_1.isAuthenticated, (0, auth_1.authorizeRoles)('ADMIN'), authController_1.getAllUsers);
 exports.default = router;
 //# sourceMappingURL=authRoutes.js.map

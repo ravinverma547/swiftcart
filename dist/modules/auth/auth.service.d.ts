@@ -14,6 +14,8 @@ export declare const createUser: ({ name, email, password }: CreateUserInput) =>
     email: string;
     password: string;
     role: import(".prisma/client").$Enums.Role;
+    isPrime: boolean;
+    totalSpentToday: number;
     createdAt: Date;
     updatedAt: Date;
     addresses: {
@@ -32,6 +34,8 @@ export declare const login: ({ email, password }: LoginInput) => Promise<{
         name: string;
         email: string;
         role: import(".prisma/client").$Enums.Role;
+        isPrime: boolean;
+        totalSpentToday: number;
         createdAt: Date;
         updatedAt: Date;
         addresses: {

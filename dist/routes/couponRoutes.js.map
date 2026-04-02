@@ -1,0 +1,1 @@
+{"version":3,"file":"couponRoutes.js","sourceRoot":"","sources":["../../src/routes/couponRoutes.ts"],"names":[],"mappings":";;;;;AAAA,sDAA8B;AAC9B,sEAA+E;AAC/E,8CAAsD;AAEtD,MAAM,MAAM,GAAG,iBAAO,CAAC,MAAM,EAAE,CAAC;AAEhC,MAAM,CAAC,IAAI,CAAC,WAAW,EAAE,sBAAe,EAAE,iCAAc,CAAC,CAAC;AAC1D,MAAM,CAAC,GAAG,CAAC,KAAK,EAAE,sBAAe,EAAE,+BAAY,CAAC,CAAC;AAEjD,kBAAe,MAAM,CAAC"}

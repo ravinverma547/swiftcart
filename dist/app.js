@@ -13,8 +13,23 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cookie_parser_1.default)());
+const frontendUrl = process.env.FRONTEND_URL;
+const formattedFrontendUrl = frontendUrl && !frontendUrl.startsWith('http')
+    ? `https://${frontendUrl}`
+    : frontendUrl;
+const allowedOrigins = [
+    'http://localhost:5173',
+    formattedFrontendUrl,
+].filter(Boolean);
 app.use((0, cors_1.default)({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
 }));
 // Routes

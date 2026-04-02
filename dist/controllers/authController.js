@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMe = exports.logout = exports.login = exports.register = void 0;
+exports.getAllUsers = exports.joinPrime = exports.getMe = exports.logout = exports.login = exports.register = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const prisma_1 = __importDefault(require("../config/prisma"));
 const jwt_1 = require("../utils/jwt");
@@ -101,4 +101,46 @@ const getMe = async (req, res, next) => {
     }
 };
 exports.getMe = getMe;
+// Toggle Prime Membership
+const joinPrime = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        // In a real app, you would process ₹300 payment here
+        const user = await prisma_1.default.user.update({
+            where: { id: userId },
+            data: { isPrime: true },
+        });
+        const { password: _, ...userWithoutPassword } = user;
+        res.status(200).json({
+            success: true,
+            message: 'Welcome to SwiftCart Prime!',
+            user: userWithoutPassword,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+exports.joinPrime = joinPrime;
+// Get All Users (Admin Only)
+const getAllUsers = async (req, res, next) => {
+    try {
+        const users = await prisma_1.default.user.findMany({
+            orderBy: { createdAt: 'desc' }
+        });
+        // Remove passwords from everything
+        const usersWithoutPasswords = users.map(user => {
+            const { password: _, ...userWithoutPassword } = user;
+            return userWithoutPassword;
+        });
+        res.status(200).json({
+            success: true,
+            users: usersWithoutPasswords,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+exports.getAllUsers = getAllUsers;
 //# sourceMappingURL=authController.js.map

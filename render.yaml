@@ -17,7 +17,7 @@ services:
         fromService:
           name: swiftcart-frontend
           type: web
-          property: url
+          property: host   # <-- 'url' ko 'host' se replace kiya
 
   # SwiftCart Vite Frontend
   - type: web
@@ -31,8 +31,9 @@ services:
         fromService:
           name: swiftcart-backend
           type: web
-          property: url
+          property: host
           suffix: /api/v1
+          # suffix: /api/v1 (Agar aap suffix lagate hain toh host ke aage jud jayega)
     routes:
       - type: rewrite
         source: /*
