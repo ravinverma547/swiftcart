@@ -93,12 +93,12 @@ model Product {
   price       Float
   images      String[]
   category    String
-  brand       String
+  brand       String?
   stock       Int
   variants    Variant[]
-  isFeatured  Boolean  @default(false)
-  ratings     Float    @default(0)
-  numReviews  Int      @default(0)
+  isFeatured  Boolean?  @default(false)
+  ratings     Float?    @default(0)
+  numReviews  Int?      @default(0)
   reviews     Review[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
