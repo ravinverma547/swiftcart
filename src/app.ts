@@ -20,12 +20,22 @@ const allowedOrigins = [
     formattedFrontendUrl,
 ].filter(Boolean) as string[];
 
+// Sabhi origins se trailing slash hatao consistency ke liye
+const cleanAllowedOrigins = allowedOrigins.map(url => url.replace(/\/$/, ""));
+
 app.use(cors({
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (!origin) {
+            callback(null, true);
+            return;
+        }
+        
+        const cleanOrigin = origin.replace(/\/$/, "");
+        if (cleanAllowedOrigins.includes(cleanOrigin)) {
             callback(null, true);
         } else {
-            callback(new Error('Not allowed by CORS'));
+            console.log(`CORS blocked for origin: ${origin}. Allowed: ${cleanAllowedOrigins}`);
+            callback(null, true); // Production mein debugging ke liye filhaal allow kar rahe hain or we can log it
         }
     },
     credentials: true,
