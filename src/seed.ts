@@ -77,6 +77,16 @@ export async function seedDatabase() {
         brand: "TrailPro",
         stock: 55,
       },
+      {
+        name: "iPhone 15 Pro",
+        description: "Titanium design, A17 Pro chip, and the most powerful iPhone camera system.",
+        price: 999.00,
+        images: ["https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1200&q=80"],
+        category: "Electronics",
+        brand: "Apple",
+        stock: 25,
+        isFeatured: true,
+      },
     ];
 
     for (const p of products) {
