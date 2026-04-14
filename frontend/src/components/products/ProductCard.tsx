@@ -29,9 +29,13 @@ const ProductCard: React.FC<Props> = ({ product }) => {
     <div className="bg-white hover:shadow-sc transition-shadow p-3 flex flex-col h-full border border-transparent hover:border-gray-200">
       <Link to={`/product/${product.id}`} className="block h-52 overflow-hidden mb-3">
         <img 
-          src={product.images[0]} 
+          src={product.images && product.images.length > 0 ? product.images[0] : 'https://images.unsplash.com/photo-1560393464-5c69a73c5770?auto=format&fit=crop&w=400&q=80'} 
           alt={product.name} 
           className="w-full h-full object-contain p-2"
+          onError={(e: any) => {
+            e.target.onerror = null;
+            e.target.src = 'https://images.unsplash.com/photo-1560393464-5c69a73c5770?auto=format&fit=crop&w=400&q=80';
+          }}
         />
       </Link>
       

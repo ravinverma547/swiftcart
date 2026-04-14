@@ -16,8 +16,9 @@ export const sendToken = (res: Response, statusCode: number, userId: string, use
   const cookieOptions = {
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict' as const,
+    // On Render, we need SameSite=None and Secure for cross-subdomain cookies
+    secure: true, 
+    sameSite: 'none' as const,
   };
 
   res.status(statusCode).cookie('token', token, cookieOptions).json({

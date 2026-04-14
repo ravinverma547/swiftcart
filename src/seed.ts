@@ -28,14 +28,12 @@ export async function seedDatabase() {
     console.log("Admin created successfully");
   }
 
-  // ULTIMATE RESET: Delete corrupted or old products first
-  const productCount = await prisma.product.count();
-  console.log(`📊 Current Product Count in DB: ${productCount}`);
-
-  if (productCount < 15) {
-    console.log("🚀 Cleaning and Seeding fresh Amazon-like catalog...");
-    await prisma.product.deleteMany(); // Clear all to avoid null field errors
-    const products = [
+  // ULTIMATE RESET: Always clear and re-seed to ensure a clean Amazon-like catalog
+  console.log("🚀 Cleaning and Seeding fresh Amazon-like catalog...");
+  await prisma.review.deleteMany(); // Clear reviews first due to relations
+  await prisma.product.deleteMany(); 
+  
+  const products = [
       {
         name: "iPhone 15 Pro",
         description: "Titanium design, A17 Pro chip, and the most powerful iPhone camera system.",
