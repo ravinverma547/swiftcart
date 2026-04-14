@@ -68,12 +68,12 @@ export const checkoutOrder = async (req: Request, res: Response) => {
     const order = await prisma.order.create({
       data: {
         userId,
-        orderItems: orderItems as any,
+        items: orderItems as any,
         shippingAddress: shippingAddress as any,
         paymentMethod,
         paymentStatus,
-        totalPrice,
-        status: "PROCESSING",
+        totalAmount: totalPrice,
+        orderStatus: "PROCESSING",
       },
     });
 

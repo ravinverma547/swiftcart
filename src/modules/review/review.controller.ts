@@ -38,12 +38,17 @@ export const createReview = async (req: Request, res: Response) => {
     const product = await prisma.product.findUnique({ where: { id: productId } });
     if (!product) return res.status(404).json({ success: false, message: "Product not found" });
 
+    // Get user name (not in token)
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+
     const review = await prisma.review.create({
       data: {
         userId,
         productId,
         rating: Math.floor(r),
         comment: comment.trim(),
+        userName: user.name,
       },
     });
 

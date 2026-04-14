@@ -50,9 +50,13 @@ export const updateReportStatus = async (req: Request, res: Response, next: Next
     const { status, adminResponse } = req.body;
     const { id } = req.params;
 
-    const report = await prisma.report.update({
+    const updateData: any = {};
+    if (status) updateData.status = String(status);
+    if (adminResponse) updateData.adminResponse = String(adminResponse);
+
+    const report = await (prisma.report as any).update({
       where: { id },
-      data: { status, adminResponse },
+      data: updateData,
     });
 
     res.status(200).json({

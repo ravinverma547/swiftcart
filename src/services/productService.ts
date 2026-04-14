@@ -68,6 +68,7 @@ export const createNewProduct = async (productData: any) => {
   return await prisma.product.create({
     data: {
       ...productData,
+      brand: productData.brand || "SwiftCart",
       price: Number(productData.price),
       stock: Number(productData.stock),
       variants: productData.variants || [],

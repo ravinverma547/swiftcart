@@ -93,26 +93,30 @@ model Product {
   price       Float
   images      String[]
   category    String
+  brand       String
   stock       Int
   variants    Variant[]
   isFeatured  Boolean  @default(false)
+  ratings     Float    @default(0)
+  numReviews  Int      @default(0)
   reviews     Review[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model Order {
-  id             String          @id @default(auto()) @map("_id") @db.ObjectId
-  userId         String          @db.ObjectId
-  user           User            @relation(fields: [userId], references: [id])
-  items          OrderItem[]
-  totalAmount    Float
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String          @db.ObjectId
+  user            User            @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+  totalAmount     Float
   shippingAddress Address
-  paymentStatus  String          // "PENDING", "COMPLETED", "FAILED"
-  orderStatus    OrderStatus     @default(PLACED)
-  timeline       OrderTimeline[]
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  paymentMethod   String?         // Made optional as some controllers don't use it
+  paymentStatus   String          // "PENDING", "COMPLETED", "FAILED"
+  orderStatus     OrderStatus     @default(PLACED)
+  timeline        OrderTimeline[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
 }
 
 type OrderItem {
@@ -143,7 +147,10 @@ model Cart {
 }
 
 type CartItem {
-  productId String @db.ObjectId
+  productId String  @db.ObjectId
   variantId String?
   quantity  Int
+  name      String
+  price     Float
+  image     String
 }

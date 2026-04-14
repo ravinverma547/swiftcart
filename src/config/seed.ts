@@ -164,7 +164,10 @@ async function main() {
         id: "000000000000000000000000" // Dummy ID to trigger create
       },
       update: {}, 
-      create: product
+      create: {
+        ...product,
+        brand: "SwiftCart"
+      }
     });
     console.log(`✅ Seeded: ${product.name}`);
   }

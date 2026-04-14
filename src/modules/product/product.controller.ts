@@ -102,7 +102,7 @@ export const adminCreateProduct = async (req: Request, res: Response) => {
         price: body.price,
         images: Array.isArray(body.images) ? body.images : [],
         category: body.category ?? "General",
-        brand: body.brand,
+        brand: body.brand || "SwiftCart",
         stock: body.stock ?? 0,
         variants: body.variants ?? null,
       },

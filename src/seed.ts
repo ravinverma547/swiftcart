@@ -34,6 +34,7 @@ async function main() {
         price: 129.99,
         images: ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=80"],
         category: "Electronics",
+        brand: "SwiftTech",
         stock: 60,
         isFeatured: true,
       },
@@ -43,6 +44,7 @@ async function main() {
         price: 89.5,
         images: ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80"],
         category: "Wearables",
+        brand: "AirFlow",
         stock: 90,
       },
       {
@@ -51,6 +53,7 @@ async function main() {
         price: 59.99,
         images: ["https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80"],
         category: "Home Appliances",
+        brand: "PureBrew",
         stock: 40,
       },
       {
@@ -59,6 +62,7 @@ async function main() {
         price: 24.99,
         images: ["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1200&q=80"],
         category: "Fashion",
+        brand: "CloudSoft",
         stock: 140,
       },
       {
@@ -67,6 +71,7 @@ async function main() {
         price: 74.0,
         images: ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80"],
         category: "Sports",
+        brand: "TrailPro",
         stock: 55,
       },
     ];
