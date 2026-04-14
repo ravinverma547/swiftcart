@@ -1,9 +1,9 @@
 import prisma from "./config/prisma";
 import bcrypt from "bcryptjs";
 
-async function main() {
+export async function seedDatabase() {
   if (!process.env.DATABASE_URL) {
-    console.warn("⚠️ DATABASE_URL not found. Skipping seeding (this is normal during build).");
+    console.warn("⚠️ DATABASE_URL not found. Skipping seeding.");
     return;
   }
 
@@ -14,12 +14,10 @@ async function main() {
 
   const existingAdmin = await prisma.user.findUnique({ where: { email: adminEmail } });
   
-  let adminUser;
   if (existingAdmin) {
-    adminUser = existingAdmin;
     console.log("Admin already exists");
   } else {
-    adminUser = await prisma.user.create({
+    await prisma.user.create({
       data: {
         name: "SwiftCart Admin",
         email: adminEmail,
@@ -95,14 +93,5 @@ async function main() {
     console.log(`✅ Seeded ${products.length} products`);
   }
 
-  console.log("✅ Seed complete");
+  console.log("✅ Seed check complete");
 }
-
-main()
-  .catch((e) => {
-    console.error("❌ Seed failed:", e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
