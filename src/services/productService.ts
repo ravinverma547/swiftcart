@@ -30,12 +30,19 @@ export const findAllProducts = async (filters: {
       where.category = category;
     }
 
-    // Temporary: removed price filters and ordering to debug 500 error
     const [products, total] = await Promise.all([
       prisma.product.findMany({
         where,
         skip,
         take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          reviews: {
+            select: {
+              rating: true,
+            }
+          }
+        }
       }),
       prisma.product.count({ where }),
     ]);
@@ -44,7 +51,6 @@ export const findAllProducts = async (filters: {
     return { products, total };
   } catch (error: any) {
     console.error("❌ CRITICAL ERROR in findAllProducts service:", error.message);
-    console.error(error);
     throw new Error(`Database Error: ${error.message}`);
   }
 };

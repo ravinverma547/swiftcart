@@ -28,11 +28,13 @@ export async function seedDatabase() {
     console.log("Admin created successfully");
   }
 
+  // ULTIMATE RESET: Delete corrupted or old products first
   const productCount = await prisma.product.count();
   console.log(`📊 Current Product Count in DB: ${productCount}`);
 
-  if (productCount < 10) {
-    console.log("🚀 Empty or low product count detected. Seeding Amazon-like catalog...");
+  if (productCount < 15) {
+    console.log("🚀 Cleaning and Seeding fresh Amazon-like catalog...");
+    await prisma.product.deleteMany(); // Clear all to avoid null field errors
     const products = [
       {
         name: "iPhone 15 Pro",
