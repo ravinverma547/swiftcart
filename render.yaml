@@ -20,7 +20,7 @@ services:
           property: url
 
   # SwiftCart Vite Frontend
-  - type: web
+  - type: static
     name: swiftcart-frontend
     env: static
     # Yahan se 'plan: free' hata diya gaya hai kyunki static sites by default free hoti hain
