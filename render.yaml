@@ -16,7 +16,7 @@ services:
       - key: FRONTEND_URL
         fromService:
           name: swiftcart-frontend
-          type: web
+          type: static
           property: url
 
   # SwiftCart Vite Frontend
