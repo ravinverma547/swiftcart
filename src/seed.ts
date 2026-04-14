@@ -186,7 +186,6 @@ export async function seedDatabase() {
     }
 
     console.log(`✅ Seeded ${products.length} products`);
-  }
 
   console.log("✅ Seed check complete");
 }
