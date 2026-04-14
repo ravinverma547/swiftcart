@@ -17,7 +17,7 @@ services:
         fromService:
           name: swiftcart-frontend
           type: web
-          property: host
+          property: url
 
   # SwiftCart Vite Frontend
   - type: web
@@ -31,7 +31,7 @@ services:
         fromService:
           name: swiftcart-backend
           type: web
-          property: host
+          property: url
           suffix: /api/v1
     routes:
       - type: rewrite
