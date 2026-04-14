@@ -13,46 +13,51 @@ export const findAllProducts = async (filters: {
   page?: number;
   limit?: number;
 }) => {
-  const { keyword, category, minPrice, maxPrice, page = 1, limit = 10 } = filters;
-  const skip = (page - 1) * limit;
+  try {
+    const { keyword, category, minPrice, maxPrice, page = 1, limit = 10 } = filters;
+    const skip = (page - 1) * limit;
 
-  const where: any = {};
+    const where: any = {};
 
-  if (keyword) {
-    where.OR = [
-      { name: { contains: keyword, mode: 'insensitive' } },
-      { description: { contains: keyword, mode: 'insensitive' } },
-    ];
-  }
+    if (keyword) {
+      where.OR = [
+        { name: { contains: keyword, mode: 'insensitive' } },
+        { description: { contains: keyword, mode: 'insensitive' } },
+      ];
+    }
 
-  if (category) {
-    where.category = category;
-  }
+    if (category) {
+      where.category = category;
+    }
 
-  if (minPrice || maxPrice) {
-    where.price = {};
-    if (minPrice) where.price.gte = minPrice;
-    if (maxPrice) where.price.lte = maxPrice;
-  }
+    if (minPrice || maxPrice) {
+      where.price = {};
+      if (minPrice) where.price.gte = minPrice;
+      if (maxPrice) where.price.lte = maxPrice;
+    }
 
-  const [products, total] = await Promise.all([
-    prisma.product.findMany({
-      where,
-      skip,
-      take: limit,
-      orderBy: { createdAt: 'desc' },
-      include: {
-        reviews: {
-          select: {
-            rating: true,
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          reviews: {
+            select: {
+              rating: true,
+            }
           }
         }
-      }
-    }),
-    prisma.product.count({ where }),
-  ]);
+      }),
+      prisma.product.count({ where }),
+    ]);
 
-  return { products, total };
+    return { products, total };
+  } catch (error) {
+    console.error("❌ Error in findAllProducts service:", error);
+    throw error;
+  }
 };
 
 export const findProductById = async (id: string) => {

@@ -21,8 +21,9 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { products } = await getProducts({ limit: 12 });
-        setProducts(products);
+        const response = await getProducts({ limit: 12 });
+        console.log('📦 Products fetched from API:', response);
+        setProducts(response.products || []);
       } catch (error) {
         console.error('Failed to fetch products', error);
       } finally {

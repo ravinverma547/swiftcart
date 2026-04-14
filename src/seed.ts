@@ -29,8 +29,10 @@ export async function seedDatabase() {
   }
 
   const productCount = await prisma.product.count();
+  console.log(`📊 Current Product Count in DB: ${productCount}`);
+
   if (productCount < 10) {
-    console.log("Empty or low product count detected. Seeding Amazon-like catalog...");
+    console.log("🚀 Empty or low product count detected. Seeding Amazon-like catalog...");
     const products = [
       {
         name: "iPhone 15 Pro",
