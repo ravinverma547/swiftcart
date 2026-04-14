@@ -7,6 +7,9 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
     const { items, shippingAddress, totalAmount, paymentStatus, couponCode } = req.body;
     const userId = (req as any).user.id;
 
+    console.log(`[Order] Placing order for user ${userId}. Items: ${items?.length}`);
+    console.log('[Order Data]:', JSON.stringify(req.body, null, 2));
+
     if (!items || items.length === 0) {
       return res.status(400).json({
         success: false,
@@ -16,11 +19,18 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
 
     // Mark coupon as used if provided
     if (couponCode) {
-      await prisma.coupon.update({
-        where: { code: couponCode },
-        data: { isUsed: true }
-      });
+      try {
+        await prisma.coupon.update({
+          where: { code: couponCode },
+          data: { isUsed: true }
+        });
+      } catch (couponUpdateError) {
+        console.error('[Order] Coupon update failed:', couponUpdateError);
+      }
     }
+
+    // Ensure totalAmount is a valid number
+    const finalAmount = isNaN(Number(totalAmount)) ? 0 : Number(totalAmount);
 
     // Create order with initial timeline
     const order = await prisma.order.create({
@@ -28,23 +38,31 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
         userId,
         items,
         shippingAddress,
-        totalAmount: Number(totalAmount),
-        paymentStatus,
+        totalAmount: finalAmount,
+        paymentStatus: paymentStatus || 'PENDING',
         orderStatus: 'PLACED',
         timeline: [
-          { status: 'PLACED', note: 'Order has been placed successfully' }
+          { 
+            status: 'PLACED', 
+            note: 'Order has been placed successfully',
+            timestamp: new Date()
+          }
         ]
       },
     });
 
     // Update stock for each product
     for (const item of items) {
-      await prisma.product.update({
-        where: { id: item.productId },
-        data: {
-          stock: { decrement: item.quantity },
-        },
-      });
+      try {
+        await prisma.product.update({
+          where: { id: item.productId },
+          data: {
+            stock: { decrement: Number(item.quantity) || 1 },
+          },
+        });
+      } catch (stockError) {
+        console.error(`[Order] Failed to update stock for product ${item.productId}:`, stockError);
+      }
     }
 
     // Calculate total spend today to award Gift Card
@@ -60,20 +78,20 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
     });
 
     const currentTotalToday = prevOrdersToday.reduce((sum: number, o: any) => sum + Number(o.totalAmount), 0);
-    const orderAmount = Number(totalAmount);
-    const newTotalToday = currentTotalToday + orderAmount;
+    const newTotalToday = currentTotalToday + finalAmount;
 
-    console.log(`[OrderReward] User: ${userId} | Today Prev: ${currentTotalToday} | This Order: ${orderAmount}`);
+    console.log(`[OrderReward] User: ${userId} | Today Prev: ${currentTotalToday} | This Order: ${finalAmount}`);
 
     let earnedCoupon = null;
     // AWARD if this order is > 50k OR total pushes them over 50k today
-    if (orderAmount >= 50000 || (newTotalToday >= 50000 && currentTotalToday < 50000)) {
+    if (finalAmount >= 50000 || (newTotalToday >= 50000 && currentTotalToday < 50000)) {
       try {
         const code = `SWIFT-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
         const expiresAt = new Date();
         expiresAt.setHours(expiresAt.getHours() + 48); // 2 days limit
 
-        earnedCoupon = await (prisma as any).coupon.create({
+        // Fixing typo: should be prisma.coupon
+        earnedCoupon = await prisma.coupon.create({
           data: {
             code,
             userId,
@@ -93,7 +111,9 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
       earnedCoupon: earnedCoupon ? (earnedCoupon as any).code : null,
       message: earnedCoupon ? `Congratulations! You've earned a 15% Discount Coupon: ${(earnedCoupon as any).code} (Valid for 2 days)` : undefined
     });
-  } catch (error) {
+  } catch (error: any) {
+    console.error('❌ CRITICAL ERROR in createOrder:', error.message);
+    console.error(error);
     next(error);
   }
 };
