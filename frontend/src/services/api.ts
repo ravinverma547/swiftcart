@@ -13,6 +13,11 @@ if (!urlObj.hostname.includes('.') && urlObj.hostname !== 'localhost') {
   API_URL = urlObj.toString();
 }
 
+// Force /api/v1 suffix if missing (essential for backend routes)
+if (!API_URL.includes('/api/v1')) {
+    API_URL = API_URL.endsWith('/') ? `${API_URL}api/v1` : `${API_URL}/api/v1`;
+}
+
 console.log('SwiftCart API URL Initialized:', API_URL);
 
 const api = axios.create({
