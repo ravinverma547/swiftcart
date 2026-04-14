@@ -2,6 +2,11 @@ import prisma from "./config/prisma";
 import bcrypt from "bcryptjs";
 
 async function main() {
+  if (!process.env.DATABASE_URL) {
+    console.warn("⚠️ DATABASE_URL not found. Skipping seeding (this is normal during build).");
+    return;
+  }
+
   await prisma.$connect();
 
   const adminEmail = process.env.ADMIN_EMAIL ?? "admin@swiftcart.demo";
