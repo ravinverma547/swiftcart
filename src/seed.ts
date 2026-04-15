@@ -28,11 +28,15 @@ export async function seedDatabase() {
     console.log("Admin created successfully");
   }
 
-  // ULTIMATE RESET: Always clear and re-seed to ensure a clean Amazon-like catalog
-  console.log("🚀 Cleaning and Seeding fresh Amazon-like catalog...");
-  await prisma.review.deleteMany(); // Clear reviews first due to relations
-  await prisma.product.deleteMany(); 
-  
+  // Only seed products if the collection is empty (safe for production)
+  const productCount = await prisma.product.count();
+  if (productCount > 0) {
+    console.log(`✅ ${productCount} products already exist. Skipping product seed.`);
+    console.log("✅ Seed check complete");
+    return;
+  }
+
+  console.log("🚀 No products found. Seeding initial catalog...");
   const products = [
       {
         name: "iPhone 15 Pro",
